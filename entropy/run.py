@@ -16,6 +16,17 @@ class Entropy:
         self.dframe.to_sql('combinations', self.engine, if_exists='replace')
         return self.dframe
 
+    def calculate(self, src, dst=None, at=None):
+        """
+        Entropy is defined as;
+            H(X) = -Σi p(X=xi) lg p(X=xi)
+
+        Likewise, conditional entropy of X given Y=yj is;
+            H(X | Y=yj) = -Σi p(X=xi | Y=yj) lg p(X=xi | Y=yj)
+
+        More generally, conditional entropy of X given Y is;
+            H(X | Y) = -Σj p(Y=yj) Σi p(X=xi | Y=yj) lg p(X=xi | Y=yj)
+        """
     def combine(self, dfs):
         join = dfs[0]
         for d in dfs[1:]:
@@ -35,3 +46,4 @@ if __name__ == '__main__':
     e = Entropy()
     dfs = e.load(res='x', y=[0, 1], z=[1, 1, 2, 3])
     print(e.transform(e.combine(list(dfs))))
+    print(e.calculate('y', 'x'))
