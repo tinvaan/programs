@@ -1,5 +1,6 @@
 
 import pandas as pd
+import sqlalchemy as sql
 
 
 class Entropy:
@@ -8,6 +9,12 @@ class Entropy:
         cls.res = kwargs.pop('res')
         for var, val in kwargs.items():
             yield pd.DataFrame({var: val})
+
+    def cache(self, data):
+        self.dframe = data
+        self.engine = sql.create_engine('sqlite://', echo=False)
+        self.dframe.to_sql('combinations', self.engine, if_exists='replace')
+        return self.dframe
 
     def combine(self, dfs):
         join = dfs[0]
@@ -21,8 +28,7 @@ class Entropy:
             d[self.res] = d.get(self.res, []) + [sum(vals.tolist())]
             for idx, val in enumerate(vals.tolist()):
                 d[combined.columns[idx]] = d.get(combined.columns[idx], []) + [val]
-        self.data = pd.DataFrame.from_dict(d)
-        return self.data
+        return self.cache(pd.DataFrame.from_dict(d))
 
 
 if __name__ == '__main__':
