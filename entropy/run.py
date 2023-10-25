@@ -1,6 +1,5 @@
 
 import pandas as pd
-import sqlalchemy as sql
 
 
 class Entropy:
@@ -13,8 +12,6 @@ class Entropy:
 
     def cache(self, data):
         self.dframe = data
-        self.engine = sql.create_engine('sqlite://', echo=False)
-        self.dframe.to_sql('combinations', self.engine, if_exists='replace')
         return self.dframe
 
     def calculate(self, src, dst=None, at=None):
