@@ -5,6 +5,7 @@ import sqlalchemy as sql
 
 class Entropy:
 
+    @classmethod
     def load(cls, *args, **kwargs):
         cls.res = kwargs.pop('res')
         for var, val in kwargs.items():
