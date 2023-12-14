@@ -1,6 +1,8 @@
 
 # pylint: disable-all
 
+from argparse import ArgumentParser
+
 
 def egcd(a, b):
     if a == 0:
@@ -18,4 +20,13 @@ def modinv(a, m):
 
 
 if __name__ == '__main__':
-    assert modinv(5, 7) == pow(5, -1, 7) == 3
+    A = ArgumentParser()
+    A.add_argument('--test', help='run tests')
+    A.add_argument('-a', type=int, help='first argument')
+    A.add_argument('-m', type=int, help='modulus argument')
+    args = A.parse_args()
+
+    if args.test:
+        assert modinv(5, 7) == pow(5, -1, 7) == 3
+    else:
+        print('modinv(%s, %s) = %s' % (args.a, args.m, modinv(args.a, args.m)))
